@@ -1,0 +1,21 @@
+body {
+    margin: 0px;
+    justify-content: center;
+    background-color: #323232;
+}
+
+#gridOverlay {
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+}
+
+.tile {
+    opacity: 0.5;
+    background-size: cover;
+}
+
+.tile:hover {
+    opacity: 1;
+}
