@@ -106,6 +106,12 @@ function keyboard(e){
             tileObjectsEl[i].style.transform = "rotate(" + tileData[i][1] + "deg)";
         }
     }
+
+    // if 's' is pressed
+    if(e.keyCode == 83){
+        e.preventDefault();
+        saveDataToFile(tileData, "map.csv");
+    }
 }
 
 function leftClick(e){ 
@@ -162,19 +168,50 @@ function tileDataToMap(tileData, raw = false){
 
 function tileDataToStations(tileData){
     // create stations
-    let stations = "[";
+    let stations = "";
     for (let h = 0; h < height; h++) {
         for (let w = 0; w < width; w++){
             i = h*width + w;
             if (tileData[i][0] > 10 && tileData[i][0] < 17) {
-                stations += "(" + w + ", " + h + "), ";
+                stations += "(" + w + ", " + h + ");";
             }
         }
     }
-    stations = stations.substring(0, stations.length - 2);
-    stations += "]";
+    stations = stations.substring(0, stations.length - 1);
 
     return stations;
+}
+
+function saveDataToFile(data, filename){
+    let formattedData = "";
+
+    // Iterate over each element in the data array and format it
+    for (let h = 0; h < height; h++) {
+        for (let w = 0; w < width; w++) {
+            let i = h * width + w;
+            formattedData += "(" + data[i][0] + ", " + data[i][1] + ");";
+            if (w < width - 1) {
+                formattedData += ""; // Add space between entries on the same line
+            }
+        }
+        formattedData = formattedData.substring(0, formattedData.length - 1);
+        formattedData += "\n";
+    }
+    formattedData = formattedData.substring(0, formattedData.length - 1);
+    // Create a Blob from the formatted data
+    let blob = new Blob([formattedData], {type: 'text/plain'});
+
+    // Create a link for the blob
+    let url = window.URL.createObjectURL(blob);
+    let a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+
+    // Clean up
+    window.URL.revokeObjectURL(url);
+    a.remove();
 }
 
 function loadMap(){
@@ -184,14 +221,14 @@ function loadMap(){
     mapData = mapData.substring(1, mapData.length - 1);
 
     // Split string into rows
-    const rows = mapData.split("], [");
+    const rows = mapData.split("\n");
 
     // Parse each row and split into tuple pairs
     let result = [];
     rows.forEach(row => {
         // Add surrounding brackets to handle edge tuples
-        row = '[' + row + ']';
-        const tuples = row.split("), (");
+        row = '(' + row + ')';
+        const tuples = row.split(");(");
         tuples.forEach(tuple => {
             const [a, b] = tuple.replace(/[()\[\]]/g, '').split(", ");
             result.push([parseInt(a, 10), parseInt(b, 10)]);
