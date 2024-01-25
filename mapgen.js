@@ -111,6 +111,7 @@ function keyboard(e){
     if(e.keyCode == 83){
         e.preventDefault();
         saveDataToFile(tileData, "map.csv");
+        saveStationsToFile(tileData, "stations.csv");
     }
 }
 
@@ -196,6 +197,35 @@ function saveDataToFile(data, filename){
         }
         formattedData = formattedData.substring(0, formattedData.length - 1);
         formattedData += "\n";
+    }
+    formattedData = formattedData.substring(0, formattedData.length - 1);
+    // Create a Blob from the formatted data
+    let blob = new Blob([formattedData], {type: 'text/plain'});
+
+    // Create a link for the blob
+    let url = window.URL.createObjectURL(blob);
+    let a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+
+    // Clean up
+    window.URL.revokeObjectURL(url);
+    a.remove();
+}
+
+function saveStationsToFile(data, filename){
+    let formattedData = "";
+
+    // Iterate over each element in the data array and format it
+    for (let h = 0; h < height; h++) {
+        for (let w = 0; w < width; w++) {
+            let i = h * width + w;
+            if (data[i][0] > 10 && data[i][0] < 17) {
+                formattedData += "(" + w + ", " + h + ");";
+            }
+        }
     }
     formattedData = formattedData.substring(0, formattedData.length - 1);
     // Create a Blob from the formatted data
