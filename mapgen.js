@@ -129,36 +129,33 @@ function rightClick(e){
 }
 
 function tileDataToMap(tileData, raw = false){
-    let mapOutput = "[";
+    let mapOutput = "";
     for (let h = 0; h < height; h++) {
-        mapOutput += "[";
         for (let w = 0; w < width; w++){
             i = h*width + w;
             if (raw) {
-                mapOutput += "(" + tileData[i][0] + ", " + tileData[i][1] + "), ";
+                mapOutput += "(" + tileData[i][0] + ", " + tileData[i][1] + ");";
             } else {
                 if (tileData[i][0] == 11) {
-                    mapOutput += "(1, 0), ";
+                    mapOutput += "(1, 0);";
                 } else if (tileData[i][0] == 12) {
-                    mapOutput += "(1, 90), ";
+                    mapOutput += "(1, 90);";
                 } else if (tileData[i][0] == 13) {
-                    mapOutput += "(7, 0), ";
+                    mapOutput += "(7, 0);";
                 } else if (tileData[i][0] == 14) {
-                    mapOutput += "(7, 90), ";
+                    mapOutput += "(7, 90);";
                 } else if (tileData[i][0] == 15) {
-                    mapOutput += "(7, 180), ";
+                    mapOutput += "(7, 180);";
                 } else if (tileData[i][0] == 16) {
-                    mapOutput += "(7, 270), ";
+                    mapOutput += "(7, 270);";
                 } else {
-                    mapOutput += "(" + tileData[i][0] + ", " + tileData[i][1] + "), ";
+                    mapOutput += "(" + tileData[i][0] + ", " + tileData[i][1] + ");";
                 }
             }
         }
-        mapOutput = mapOutput.substring(0, mapOutput.length - 2);
-        mapOutput += "], ";
+        mapOutput = mapOutput.substring(0, mapOutput.length - 1);
+        mapOutput += "\n";
     }
-    mapOutput = mapOutput.substring(0, mapOutput.length - 2);
-    mapOutput += "]";
     
     return mapOutput;
 }
